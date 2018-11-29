@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+
+{% block contenido %}
+
+   <h2>Modificar Registro</h2>
+   <form action="" id="formularioRegistro"method="POST">
+       {% csrf_token %}
+
+        <input type="hidden" name="txtId" id="txtId" value="{{ personas.id }}">
+
+       <label for="">Run</label>
+       <input type="text" name="txtRun" id="txtRun"value="{{ personas.run }}">
+       <br>
+       <label for="">Nombre</label>
+       <input type="text" name="txtNombre" id="txtNombre" value="{{ personas.nombre }}">
+       <br>
+       <label for="">CorreoElectronico</label>
+       <input type="text" name="txtCorreo" id="txtCorreo"value="{{ personas.correo }}">
+       <br>
+       <label for="">Telefono</label>
+       <input type="number" name="txtTelefono" id="txtTelefono"value="{{ personas.telefono }}">
+       <br>
+       <label for="">Region</label>
+       <select name="cboRegion" id="cboRegion">
+           
+           {% for r in regiones %}
+
+           <option 
+
+           {% if r.id == personas.regiones.id %}
+            {{'select'}}
+           
+           
+           {% endif %}
+           
+           value="{{ r.id }}">{{ r.nombre }}</option>
+           
+           {% endfor %}
+       </select>
+       
+       <br>
+       <label for="">Ciudad</label>
+       <select name="cboCiudad" id="cboCiudad">
+           {% for c in ciudades %}
+
+           <option value="{{ c.id }}">{{ c.nombre }}</option>
+           
+           {% endfor %}
+
+       </select>
+       <br>
+       <br>
+      <input type="submit" name="btnTelefono" id="btnTelefono" value="Modificar"> 
+   </form>
+
+{% endblock contenido %}  

@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block agregarMascota %}
+
+<form action="" id="agregarMascota" method="POST">
+    {% csrf_token %}
+    <br>
+    <h2>Agregar Mascota</h2>
+    <br>
+    <label for="">Nombre</label>
+    <input type="text" name="txtNomMascota" id="txtNomMascota">
+    <br>
+    <label for="">Raza</label>
+    <select name="cboRaza" id="cboRaza">
+        <option value="">Seleccionar</option>
+        {% for r in raza %}
+
+        <option value="{{ r.id }}">{{ r.nombre }}</option>
+        
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Genero</label>
+    <select name="cboGenero" id="cboGenero">
+        <option value="">Seleccionar</option>
+        {% for g in genero %}
+
+        <option value="{{ g.id }}">{{ g.nombre }}</option>
+        
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Fecha de ingreso</label>
+    <input type="text" name="txtFechaIng" id="txtFechaIng">
+    <br>
+    <label for="">Fecha de Nacimiento</label>
+    <input type="text" name="txtFechaNac" id="txtFechaNac">
+    <br>
+    <label for="">Estado Mascota</label>
+    <select name="cboEstado" id="cboEstado">
+        <option value="">Seleccionar</option>
+        {% for e in estado %}
+
+        <option value="{{ e.id }}">{{ e.nombre }}</option>
+        
+        {% endfor %}
+
+    </select>
+    <br>
+    <input type="submit" name="btnGuardar" id="btnGuardar" value="Guardar"> 
+</form>
+<h3>{{ mensaje }}</h3>
+{% endblock agregarMascota %}

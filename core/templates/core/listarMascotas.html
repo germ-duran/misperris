@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+
+{% block listarMascotas %}
+<h2>Listado Mascotas</h2>
+
+<table>
+
+        <tr>
+            <th>Nombre</th>
+            <th>Raza</th>
+            <th>Genero</th>
+            <th>Fecha de Ingreso</th>    
+            <th>Fecha de Nacimiento</th>
+            <th>Estado de la Mascotas</th>
+            <th>Imagen</th>
+            <th>Opciones</th>
+            
+        </tr>
+    
+        {% for m in mascota %}
+    
+        <tr>
+            <td>{{m.nombre}}</td>
+            <td>{{m.Raza.nombre}}</td>
+            <td>{{m.GeneroMascota.nombre}}</td><!--Problema para agregar los combobox ya que en el agregar no me permite obtenerlos-->
+            <td>{{m.ingreso}}</td>
+            <td>{{m.nacimiento}}</td>
+            <td>{{m.EstadoMascota.nombre}}</td>
+            <td>
+            {% if %}
+            <img src="{{ a.imagen.url }}" width="200" height="200">
+            {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'eliminarMascota' m.id %}">Eliminar</a> 
+                <a href="{% url 'modificarMascotas' m.id %}">Modificar</a> 
+            </td>
+    
+        </tr>
+    
+        {% endfor %}
+
+    </table>
+
+    {% if messages %}
+
+        {% for m in messages  %}
+        <div>{{ m }}</div>
+        {% endfor %}
+
+    
+    {% endif %}
+
+{% endblock listarMascotas %}

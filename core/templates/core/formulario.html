@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+ {% block contenido %}
+
+    <h2>Formulario Registro</h2>
+    <form action="" id="formularioRegistro"method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="">Run</label>
+        <input type="text" name="txtRun" id="txtRun">
+        <br>
+        <label for="">Nombre</label>
+        <input type="text" name="txtNombre" id="txtNombre">
+        <br>
+        <label for="">CorreoElectronico</label>
+        <input type="text" name="txtCorreo" id="txtCorreo">
+        <br>
+        <label for="">Telefono</label>
+        <input type="number" name="txtTelefono" id="txtTelefono">
+        <br>
+        <label for="">Region</label>
+        <select name="cboRegion" id="cboRegion">
+            
+            {% for r in regiones %}
+
+            <option value="{{ r.id }}">{{ r.nombre }}</option>
+            
+            {% endfor %}
+        </select>
+        
+        <br>
+        <label for="">Ciudad</label>
+        <select name="cboCiudad" id="cboCiudad">
+            {% for c in ciudades %}
+
+            <option value="{{ c.id }}">{{ c.nombre }}</option>
+            
+            {% endfor %}
+
+        </select>
+        <br>
+
+        <label>Imagen</label>
+        <input type="file" name="txtImagen" id="txtImagen">
+
+        <br>
+       <input type="submit" name="btnTelefono" id="btnTelefono" value="Guardar"> 
+       
+    </form>
+    <h3>{{ mensaje }}</h3>
+{% endblock contenido %}  

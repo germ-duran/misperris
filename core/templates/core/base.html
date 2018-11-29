@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mis perris</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'core/img/logo.png' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css"> 
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <link rel="stylesheet" href="{% static 'core/css/estilos.css' %}">
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
+    <script src="{% static 'core/js/inicializacion.js' %}"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js"></script>
+    <script>
+    
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAcSnus64ABaMK8ojQW0JzOYcDKdll74Oc",
+        authDomain: "misperris-2346e.firebaseapp.com",
+        databaseURL: "https://misperris-2346e.firebaseio.com",
+        projectId: "misperris-2346e",
+        storageBucket: "misperris-2346e.appspot.com",
+        messagingSenderId: "766826330646"
+    };
+    firebase.initializeApp(config);
+
+    //Obtenemos un objeto messages
+    const messaging = firebase.messaging(); // cost es una variable que nunca cambia en Java
+    //Vamos a registrar nuesto Servicewok con Firebase
+    navigator.serviceWorker.register('./serviceworker.js')
+
+    //Una vez que el serviceworker es registrado se va a ejecutar Then con la funcion
+    .then(function(register){
+        //Le pasamos el objeto registrado con el serviceworker a Firebase
+        messaging.useServiceWorker(register);
+
+        //Mostramos al usuario una ventana para preguntarle si acepta 
+        //que le enviemos notificaciones al navegador
+        messaging
+        .requestPermission()
+        
+        //Este Then se ejecutara en el caso que el usuaio haya aceptado que le mostremos notificaciones
+        .then(function(){
+            console.log("El usuario acepto el envio de notificaciones (: ");
+            //Una vez aceptado el permiso, se genera un Token unico que nos identifica como usuarios
+            //todos los Token son diferentes, nunca pueden repetirse
+            return messaging.getToken();//Esta linea genera el Token. Ejemplo de un token: p23jl32kj4lk2j45hlk3l2h234
+        })
+        //Este segundo The recibe el Token generado en el anterior
+        .then(function(token){
+            console.log(token);
+            //En este paso es necesario enviar el token a Django o aplicacion para almacenarlo
+            //enviamos el token
+
+            fetch('api/agregar-token/', {
+                method:'POST',
+                body:JSON.stringify({
+                    'token':token //Creamos variable token que va a co5rresponder al token que se creo
+                })
+            })
+
+            .then(function(){
+                console.log("El token ha sido enviado")
+            })
+        })
+        //Los the anterioes solo se ejecutaran cuando el usuario haya aceptado el envio de notificaciones
+        .catch(function(err){
+            //Este catch se ejecuta cuando el usuario no haya aceptado que le mostremos notificaciones
+            console.log("El usuario no ha aceptado el envio de notificaciones : ", err)
+        })
+    })
+
+    //Vamos a programar la recepcion del mensaje PUSH, recibimos el mensaje que viene desde FireBase
+    messaging.onMessage(function(payload){
+        //Esta funcion se ejecuta cuando se recibe la notificacion
+        //dentro de Payload viene el mensaje
+
+
+        var options = {
+            body:payload.notification.body,
+            icon:payload.notification.icon
+        }
+
+        var title = payload.notification.title
+        //Cuando llegue el mensaje mostramos la notificacion
+        var mensaje = new Notification(title, options)
+
+    })
+    </script>
+
+
+
+
+</head>
+<body>
+             <header>
+                <img class="logo" src="{% static 'core/img/logo.png' %}" alt="logo">
+                <ul class ="navegacion">
+                    <li>
+                        <a href="{% url 'home' %}">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'agregarMascota' %}">Agregar Mascota</a>
+                    </li>
+                    <li>
+                        <a href="#">Servicios</a>
+                    </li>
+                    <li>
+                        <a href="#">Contactanos</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'galeria' %}">Galeria</a>
+                    </li>
+                    
+                    {% if request.user.is_authenticated %}
+        
+                    <li>
+                        <a href="{% url 'logout' %}">Cerrar sesión</a>
+                    </li>
+
+
+                    <li>
+                      <a href="">{{ request.user.first_name }}</a>
+                    </li>
+                    {% else %}
+        
+                    <li>
+                        <a href="{% url 'login' %}">Iniciar sesión</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'register' %}">Registrar</a>
+                    </li>
+        
+                    {% endif %}
+                </ul>
+            </header>         
+        
+    <div class="landing">
+        <div class="slider">
+            <div>
+                    <img title="" class="landing_img" src="{% static 'core/img/perro.png' %}" alt="perro">
+            </div>
+            <div>
+                    <img title="" class="landing_img" src="{% static 'core/img/Tom2.jpg' %}" alt="perro apolo">
+            </div>
+            <div>
+                    <img title="" class="landing_img" src="{% static 'core/img/Apolo.jpg' %}" alt="perro duque">
+            </div>
+            <div>
+                    <img title="" class="landing_img" src="{% static 'core/img/Duque.jpg' %}" alt="perro Tom">
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <h1 class="eslogan">
+            +56 9 98765431  
+        </h1>
+        <h3 class="slogan">
+            Rescate y adopción de perros callejeros
+        </h3>
+
+        <ul class="social">
+            <li> <img src="{% static 'core/img/socialfacebook.png' %}" alt="facebook"></li>
+            <li> <img src="{% static 'core/img/socialplus.png' %}" alt="Google"></li>
+            <li> <img src="{% static 'core/img/social-inst.png' %}" alt="instragram"></li>
+            <li> <img src="{% static 'core/img/Email.png' %}" alt="Correo"></li>
+        </ul>
+    </div>
+    {% block agregarMascota %}
+
+    {% endblock agregarMascota %}
+    
+    {% block listarMascotas %}
+
+    {% endblock listarMascotas %}
+
+    {% block modificarMascotas%}
+    
+    {% endblock modificarMascotas%}
+
+  
+    <div>
+        {% block contenido %}
+
+        {% endblock contenido %}
+    <header class="header2">
+        <br>
+        <h5 class="text3"> Desarrollo web y mobile </h5>
+    </header>
+    </div>  
+
+</html>

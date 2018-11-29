@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block modificarMascotas %}
+<h2>Modificar Mascota</h2>
+<form action="" id="agregarMascota" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="txtid" id="txtid" value="{{Mascota.id}}">
+    <label for="">Nombre</label>
+    <input type="text" name="txtNomMascota" id="txtNomMascota" value="{{mascota.nombre}}">
+    <br>
+    <label for="">Raza</label>
+    <select name="cboRaza" id="cboRaza">
+        <option value="">Seleccionar</option>
+        {% for r in raza %}
+
+        <option 
+        {% if r.id == mascota.Raza.id %}
+        {{'selected'}}
+        {% endif %}
+        
+        value="{{ r.id }}">{{ r.nombre }}</option>
+        
+        
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Genero</label>
+    <select name="cboGenero" id="cboGenero">
+        <option value="">Seleccionar</option>
+        {% for g in genero %}
+
+        <option 
+        {% if g.id == mascota.GeneroMascota.id %}
+        {{'selected'}}
+        {% endif %}
+
+        value="{{ g.id }}">{{ g.nombre }}</option>
+        
+
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Fecha de ingreso</label>
+    <input type="text" name="txtFechaIng" id="txtFechaIng" value="{{mascota.ingreso}}">
+    <br>
+    <label for="">Fecha de Nacimiento</label>
+    <input type="text" name="txtFechaNac" id="txtFechaNac" value="{{mascota.nacimiento}}">
+    <br>
+    <label for="">Estado Mascota</label>
+    <select name="cboEstado" id="cboEstado">
+        <option value="">Seleccionar</option>
+        {% for e in estado %}
+
+        <option 
+        {% if e.id == mascota.EstadoMascota.id %}
+        {{'selected'}}
+        {% endif %}
+        value="{{ e.id }}">{{ e.nombre }}</option>
+        
+        {% endfor %}
+
+    </select>
+    <br>
+    <input type="submit" name="btnModificar" id="btnModificar" value="Modificar"> 
+</form>
+<h3>{{ mensaje }}</h3>
+{% endblock modificarMascotas %}

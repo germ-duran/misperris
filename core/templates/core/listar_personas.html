@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+
+
+{% block contenido %}
+
+<h2>Listado Personas</h2>
+
+<table>
+
+    <tr>
+        <th>run</th>
+        <th>nombre</th>
+        <th>correo</th>
+        <th>telefono</th>    
+        <th>region</th>
+        <th>ciudad</th>
+        <th>Opciones</th>
+    </tr>
+
+    {% for a in personas %}
+
+    <tr>
+        <td>{{ a.run }}</td>
+        <td>{{ a.nombre }}</td>
+        <td>{{ a.correo }}</td>
+        <td>{{ a.telefono }}</td>
+        <td>{{ a.region.nombre }}</td>
+        <td>{{ a.ciudad.nombre }}</td>
+        <td>
+            <a href="{% url 'eliminar_persona' a.id %}">Eliminar</a>
+            <a href="{% url 'modificar_personas' a.id %}">Modificar</a>
+        </td>
+    </tr>
+
+    {% endfor %}
+
+   
+
+</table>
+{% if messages %}
+
+    {% for m in messages  %}
+    <div>{{ m }}</div>
+    {% endfor %}
+
+    
+{% endif %}
+
+{% endblock contenido %}
